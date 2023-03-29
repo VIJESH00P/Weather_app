@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="weather.css">
+    <title>Document</title>
+</head>
+<body>
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+
+            </div>
+            <div class="col-lg-4 mt-5 h-25 w-25 pt-4">
+                    
+                    <input type="text"  class="form-control" id="dest" placeholder="Enter Your Destination">
+                    <button type="button"  onclick="search()" class="btn btn-primary mt-3 mb-3">Search</button>
+            </div> 
+            
+
+            <div class="col-lg-4">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div style="margin-left: 200px;" id="result" class="col-4">
+             
+            </div>
+            <div id="result1" class="col-4">
+               
+            </div>
+        </div>
+     </div>
+</body>
+<script>
+ function search(){
+    destination=dest.value
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${destination}&appid=5b4bee0ba241d092159faf007e166080`).then(data=>data.json())
+    .then(data=>dispayData(data))
+
+}
+
+function dispayData(destinationDetails){
+    Destination=destinationDetails.name
+    weather=destinationDetails.weather[0].main
+    description=destinationDetails.weather[0].description
+    temperature=destinationDetails.main.temp
+    C = Math.floor(temperature - 273.15)
+    humidity=destinationDetails.main.humidity
+    pressure=destinationDetails.main.pressure
+    wind=destinationDetails.wind.speed
+    visibility=destinationDetails.visibility
+    let htmlData=`<div class="row  container rounded-5  mb-1 p-2 ">
+  <div class="col-lg-6 col-md-6 col-sm-12 pt-5 card-header container  text-center shadow-lg  rounded " style=" color:black;width:400px;height:400px; background-image: url('https://th.bing.com/th/id/R.99056a225f824858d5947d4fed4db16d?rik=JI2v7dbTrc6X3Q&riu=http%3a%2f%2fimages8.design-editor.com%2f93%2f9333824%2f3958%2fA98231D9-A50D-9938-6E62-F86A78DADF5D.png&ehk=tA3h0M1IAcWCs5GvsaZ%2f%2fWWrwlyX1TdSpPH%2beg9Fe9g%3d&risl=&pid=ImgRaw&r=0');background-repeat: no-repeat;background-size: cover;">
+     <h2 style="color:red">${Destination}</h2>
+     <h1 class="ms-4 text-dark" style="font-size: 80px;"> ${C}°<span style="font-size:large; color:black;">C</span></h1>
+     <h3 class="mt-5 text-center ps-3">${weather}<h3>
+  </div>`
+  let htmlData1=`
+  <div class="col-lg-6 col-md-6 col-sm-12  mt-5  pt-2 container text-center shadow-lg bg-primary rounded >
+    <ul class="list-group list-group-flush container text-center">
+      <li class="list-group-item container  text-center" style="color:white">Wind :${wind}km/hr</li>
+      <li class="list-group-item container  text-center" style="color:white">Visibility :${visibility}</li>
+      <li class="list-group-item container  text-center" style="color:white">Humidity :${humidity}</li>
+      <li class="list-group-item container  text-center" style="color:white"> Pressure :${pressure}</li>
+    </ul>
+  </div>
+</div>`
+      result.innerHTML=htmlData 
+      result1.innerHTML=htmlData1 
+}
+</script>
